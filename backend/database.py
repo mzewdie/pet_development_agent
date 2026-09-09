@@ -11,8 +11,8 @@ from contextlib import contextmanager
 DB_PATH = os.environ.get("EXPENSE_DB_PATH", os.path.join(os.path.dirname(os.path.dirname(__file__)), "expenses.db"))
 
 DEFAULT_CATEGORIES = [
-    ("Housing", "Home rent, mortgage, maintenance, repairs", "#3B82F6"),
     ("Groceries & Food", "Supermarket, dining out, coffee, groceries", "#10B981"),
+    ("Housing", "Home rent, mortgage, maintenance, repairs", "#3B82F6"),
     ("Transportation", "Public transit, fuel, rideshare, parking", "#F59E0B"),
     ("Utilities", "Electricity, water, gas, internet, mobile", "#6366F1"),
     ("Healthcare & Medical", "Doctor, pharmacy, health insurance, fitness", "#EC4899"),

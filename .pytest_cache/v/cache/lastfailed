@@ -1,1 +1,6 @@
-{}
+{
+  "tests/test_api_crud.py::TestClient": true,
+  "tests/test_currencies_and_summary.py::TestClient": true,
+  "tests/test_search_filter_sort.py::TestClient": true,
+  "tests/test_validation.py::TestClient": true
+}
