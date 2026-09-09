@@ -33,7 +33,7 @@ class CategoryResponse(CategoryBase):
 
 class ExpenseBase(BaseModel):
     amount: float = Field(..., gt=0, description="Expense amount (must be strictly positive)")
-    currency: str = Field(..., min_length=3, max_length=3, description="3-letter ISO currency code, e.g. USD, EUR, GBP")
+    currency: str = Field("EUR", min_length=3, max_length=3, description="3-letter ISO currency code, defaults to EUR (€)")
     category: str = Field(..., min_length=1, max_length=100, description="Expense category")
     description: str = Field(..., min_length=1, max_length=255, description="Description of the expense")
     date: str = Field(..., description="Date in YYYY-MM-DD format")

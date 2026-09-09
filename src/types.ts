@@ -75,9 +75,11 @@ export interface ExpenseListResponse {
   page_count: number;
 }
 
+export const DEFAULT_CURRENCY = 'EUR';
+
 export const SUPPORTED_CURRENCIES = [
-  { code: 'USD', symbol: '$', label: 'US Dollar' },
   { code: 'EUR', symbol: '€', label: 'Euro' },
+  { code: 'USD', symbol: '$', label: 'US Dollar' },
   { code: 'GBP', symbol: '£', label: 'British Pound' },
   { code: 'JPY', symbol: '¥', label: 'Japanese Yen' },
   { code: 'CAD', symbol: 'CA$', label: 'Canadian Dollar' },

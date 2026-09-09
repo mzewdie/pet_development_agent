@@ -115,3 +115,17 @@ def test_missing_required_fields(client):
         "amount": 50.0
     })
     assert res.status_code == 422
+
+def test_default_currency_is_eur(client):
+    """Verify that omitting currency when creating an expense defaults to EUR."""
+    res = client.post("/api/expenses", json={
+        "amount": 75.25,
+        "category": "Groceries & Food",
+        "description": "Bakery and bread",
+        "date": "2026-09-09"
+    })
+    assert res.status_code == 201
+    data = res.json()
+    assert data["currency"] == "EUR"
+    assert data["amount"] == 75.25
+

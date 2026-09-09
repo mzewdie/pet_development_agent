@@ -16,6 +16,7 @@
   "tests/test_search_filter_sort.py::test_filter_by_date_range",
   "tests/test_search_filter_sort.py::test_search_by_description",
   "tests/test_search_filter_sort.py::test_sort_by_amount_asc_and_desc",
+  "tests/test_validation.py::test_default_currency_is_eur",
   "tests/test_validation.py::test_empty_or_whitespace_strings_rejected",
   "tests/test_validation.py::test_invalid_currency_rejected",
   "tests/test_validation.py::test_invalid_date_format_rejected",

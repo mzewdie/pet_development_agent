@@ -3,6 +3,7 @@ import {
   Expense,
   ExpenseInput,
   Category,
+  DEFAULT_CURRENCY,
   SUPPORTED_CURRENCIES,
   getCurrencySymbol
 } from '../types';
@@ -24,7 +25,7 @@ export const ExpenseModal: React.FC<ExpenseModalProps> = ({
   categories,
 }) => {
   const [amount, setAmount] = useState<string>('');
-  const [currency, setCurrency] = useState<string>('USD');
+  const [currency, setCurrency] = useState<string>(DEFAULT_CURRENCY);
   const [category, setCategory] = useState<string>('Groceries & Food');
   const [isCustomCategory, setIsCustomCategory] = useState<boolean>(false);
   const [customCategory, setCustomCategory] = useState<string>('');
@@ -57,7 +58,7 @@ export const ExpenseModal: React.FC<ExpenseModalProps> = ({
       } else {
         // Defaults for new expense
         setAmount('');
-        setCurrency('USD');
+        setCurrency(DEFAULT_CURRENCY);
         setCategory(categories[0]?.name || 'Groceries & Food');
         setIsCustomCategory(false);
         setCustomCategory('');

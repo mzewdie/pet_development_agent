@@ -71,7 +71,7 @@ def init_db(db_path: str = DB_PATH) -> None:
             CREATE TABLE IF NOT EXISTS expenses (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 amount REAL NOT NULL CHECK(amount > 0),
-                currency TEXT NOT NULL CHECK(length(currency) = 3),
+                currency TEXT NOT NULL DEFAULT 'EUR' CHECK(length(currency) = 3),
                 category TEXT NOT NULL,
                 description TEXT NOT NULL,
                 date TEXT NOT NULL CHECK(length(date) = 10),
