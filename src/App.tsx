@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Expense,
   ExpenseInput,
@@ -21,6 +22,8 @@ import { Dashboard } from './components/Dashboard';
 import { ExpenseList } from './components/ExpenseList';
 import { ExpenseModal } from './components/ExpenseModal';
 import { DeleteModal } from './components/DeleteModal';
+import { SettingsModal } from './components/SettingsModal';
+import { ClearConfirmModal } from './components/ClearConfirmModal';
 import { ToastContainer, ToastMessage } from './components/Toast';
 
 export default function App() {
@@ -36,6 +39,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSeeding, setIsSeeding] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isClearing, setIsClearing] = useState<boolean>(false);
 
   // Filters & Sorting state
   const [filters, setFilters] = useState<ExpenseFilterParams>({
@@ -45,6 +49,8 @@ export default function App() {
 
   // Modals state
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isClearConfirmOpen, setIsClearConfirmOpen] = useState<boolean>(false);
   const [expenseToEdit, setExpenseToEdit] = useState<Expense | null>(null);
   const [expenseToDelete, setExpenseToDelete] = useState<Expense | null>(null);
 
@@ -169,17 +175,22 @@ export default function App() {
     }
   };
 
-  // Reset all expenses
-  const handleResetData = async () => {
-    if (window.confirm('Are you sure you want to clear all expense records from SQLite?')) {
-      try {
-        await resetExpenses();
-        addToast('All expense records cleared from SQLite persistence', 'info');
-        loadExpenses(filters);
-        loadDashboard();
-      } catch (err: any) {
-        addToast(err.message || 'Failed to reset data', 'error');
-      }
+  // Empty/Clear Database Handler (Called from ClearConfirmModal)
+  const handleConfirmClearDatabase = async () => {
+    try {
+      setIsClearing(true);
+      await resetExpenses();
+      addToast('Database emptied: All expense records cleared from SQLite', 'info');
+      setIsClearConfirmOpen(false);
+      // Immediately reset client state
+      setExpenses([]);
+      setTotalCount(0);
+      loadExpenses(filters);
+      loadDashboard();
+    } catch (err: any) {
+      addToast(err.message || 'Failed to empty database', 'error');
+    } finally {
+      setIsClearing(false);
     }
   };
 
@@ -193,9 +204,7 @@ export default function App() {
           setExpenseToEdit(null);
           setIsModalOpen(true);
         }}
-        onSeedData={handleSeedData}
-        onResetData={handleResetData}
-        isSeeding={isSeeding}
+        onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -238,7 +247,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Add / Edit Expense Modal */}
+      {/* Add / Edit Expense Modal (CRUD: Create & Update) */}
       <ExpenseModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -250,13 +259,33 @@ export default function App() {
         categories={categories}
       />
 
-      {/* Deletion Confirmation Modal */}
+      {/* Deletion Confirmation Modal (CRUD: Delete) */}
       <DeleteModal
         isOpen={Boolean(expenseToDelete)}
         expense={expenseToDelete}
         onClose={() => setExpenseToDelete(null)}
         onConfirm={handleConfirmDelete}
         isDeleting={isDeleting}
+      />
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        summary={dashboardSummary}
+        expenseCount={totalCount}
+        onOpenClearConfirm={() => setIsClearConfirmOpen(true)}
+        onSeedData={handleSeedData}
+        isSeeding={isSeeding}
+      />
+
+      {/* Clear Database Confirmation Modal */}
+      <ClearConfirmModal
+        isOpen={isClearConfirmOpen}
+        onClose={() => setIsClearConfirmOpen(false)}
+        onConfirm={handleConfirmClearDatabase}
+        expenseCount={totalCount}
+        isClearing={isClearing}
       />
 
       {/* Toast Notification Container */}

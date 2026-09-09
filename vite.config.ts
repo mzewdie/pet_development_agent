@@ -51,28 +51,6 @@ function fastapiDevPlugin(): Plugin {
           await new Promise((r) => setTimeout(r, 500));
           if (await isFastApiRunning()) {
             console.log(`[FastAPI] Python backend is ready and listening on ${FASTAPI_URL}`);
-            // Check if initial seeding is needed
-            try {
-              const req = http.get(`${FASTAPI_URL}/api/health`, (res) => {
-                let data = '';
-                res.on('data', chunk => data += chunk);
-                res.on('end', () => {
-                  try {
-                    const parsed = JSON.parse(data);
-                    if (parsed.expense_count === 0) {
-                      console.log('[FastAPI] Auto-seeding initial realistic sample data...');
-                      const seedReq = http.request(`${FASTAPI_URL}/api/seed`, { method: 'POST' });
-                      seedReq.end();
-                    }
-                  } catch (e) {
-                    // ignore
-                  }
-                });
-              });
-              req.end();
-            } catch (e) {
-              // ignore
-            }
             break;
           }
         }

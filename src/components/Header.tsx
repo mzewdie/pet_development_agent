@@ -4,27 +4,21 @@ import {
   LayoutDashboard,
   ReceiptText,
   PlusCircle,
-  Database,
-  RefreshCw,
-  Trash2
+  Settings
 } from 'lucide-react';
 
 interface HeaderProps {
   currentTab: 'dashboard' | 'expenses';
   onTabChange: (tab: 'dashboard' | 'expenses') => void;
   onOpenCreateModal: () => void;
-  onSeedData: () => void;
-  onResetData: () => void;
-  isSeeding: boolean;
+  onOpenSettings: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentTab,
   onTabChange,
   onOpenCreateModal,
-  onSeedData,
-  onResetData,
-  isSeeding,
+  onOpenSettings,
 }) => {
   return (
     <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-30 shadow-md">
@@ -81,30 +75,18 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </div>
 
-            {/* Quick Demo Data Seed Button */}
+            {/* Settings Button */}
             <button
-              id="seed-demo-btn"
-              onClick={onSeedData}
-              disabled={isSeeding}
-              title="Seed realistic sample expenses across multiple currencies"
-              className="hidden md:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 text-xs font-medium transition-colors disabled:opacity-50"
+              id="header-settings-btn"
+              onClick={onOpenSettings}
+              title="Database & Application Settings (Empty DB, Seed Data, Info)"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 text-xs sm:text-sm font-medium transition-colors"
             >
-              <Database className={`w-3.5 h-3.5 ${isSeeding ? 'animate-spin' : 'text-emerald-400'}`} />
-              <span>{isSeeding ? 'Seeding...' : 'Seed Demo'}</span>
+              <Settings className="w-4 h-4 text-slate-400" />
+              <span className="hidden md:inline">Settings</span>
             </button>
 
-            {/* Reset Data Button */}
-            <button
-              id="reset-data-btn"
-              onClick={onResetData}
-              title="Clear all expense records"
-              className="hidden lg:flex items-center space-x-1 px-2.5 py-1.5 rounded-lg border border-slate-800 text-slate-400 hover:text-red-400 hover:bg-red-500/10 text-xs font-medium transition-colors"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Clear</span>
-            </button>
-
-            {/* Primary Action Button */}
+            {/* Primary Action Button (Create Expense) */}
             <button
               id="new-expense-btn"
               onClick={onOpenCreateModal}

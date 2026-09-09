@@ -339,3 +339,4 @@ def seed_test_data(conn: sqlite3.Connection) -> int:
 def reset_all_data(conn: sqlite3.Connection) -> None:
     cursor = conn.cursor()
     cursor.execute("DELETE FROM expenses")
+    cursor.execute("DELETE FROM sqlite_sequence WHERE name='expenses'")

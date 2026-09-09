@@ -44,6 +44,64 @@ def test_seed_and_reset_data(client):
     health_empty = client.get("/api/health")
     assert health_empty.json()["expense_count"] == 0
 
+def test_empty_database_and_crud_lifecycle(client):
+    """
+    Verify starting with an empty database:
+    1. Clear / reset database leaves 0 expenses.
+    2. Dashboard reflects 0 records with no false totals.
+    3. Full CRUD lifecycle functions seamlessly on an empty database.
+    4. Deleting the only expense returns database to empty state cleanly.
+    """
+    # 1. Reset database to empty
+    client.post("/api/reset")
+    
+    # Check health and empty state
+    health = client.get("/api/health").json()
+    assert health["expense_count"] == 0
+    
+    expenses_res = client.get("/api/expenses").json()
+    assert expenses_res["total_count"] == 0
+    assert expenses_res["items"] == []
+    
+    dash = client.get("/api/dashboard").json()
+    assert dash["total_expense_records"] == 0
+    assert dash["totals_by_currency"] == []
+    assert dash["recent_expenses"] == []
+    
+    # 2. CREATE first expense
+    create_res = client.post("/api/expenses", json={
+        "amount": 25.50,
+        "currency": "USD",
+        "category": "Groceries & Food",
+        "description": "First expense in fresh DB",
+        "date": "2026-09-09"
+    })
+    assert create_res.status_code == 201
+    created_id = create_res.json()["id"]
+    
+    # 3. READ expense
+    read_res = client.get(f"/api/expenses/{created_id}")
+    assert read_res.status_code == 200
+    assert read_res.json()["description"] == "First expense in fresh DB"
+    
+    # 4. UPDATE expense
+    update_res = client.put(f"/api/expenses/{created_id}", json={
+        "amount": 30.00,
+        "description": "Updated first expense in fresh DB"
+    })
+    assert update_res.status_code == 200
+    assert update_res.json()["amount"] == 30.00
+    assert update_res.json()["description"] == "Updated first expense in fresh DB"
+    
+    # 5. DELETE expense
+    del_res = client.delete(f"/api/expenses/{created_id}")
+    assert del_res.status_code == 200
+    
+    # 6. Verify back to empty database
+    health_after = client.get("/api/health").json()
+    assert health_after["expense_count"] == 0
+    assert client.get("/api/expenses").json()["total_count"] == 0
+
 def test_multi_currency_isolation(client):
     """
     CRITICAL REQUIREMENT:

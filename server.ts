@@ -57,28 +57,6 @@ async function ensureFastApiBackend(): Promise<void> {
     await new Promise((r) => setTimeout(r, 500));
     if (await isFastApiRunning()) {
       console.log(`[Backend] FastAPI backend ready at ${FASTAPI_URL}`);
-      // Seed sample data if empty on first launch
-      try {
-        const checkReq = http.get(`${FASTAPI_URL}/api/health`, (res) => {
-          let data = '';
-          res.on('data', chunk => data += chunk);
-          res.on('end', () => {
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.expense_count === 0) {
-                console.log('[Backend] Initializing with realistic seed data...');
-                const seedReq = http.request(`${FASTAPI_URL}/api/seed`, { method: 'POST' });
-                seedReq.end();
-              }
-            } catch (e) {
-              // ignore
-            }
-          });
-        });
-        checkReq.end();
-      } catch (err) {
-        // ignore
-      }
       return;
     }
   }

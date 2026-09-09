@@ -275,7 +275,13 @@ The application uses an SQLite file named `expenses.db` (located at the root, or
 - `POST /api/seed`
   - Clears existing records and seeds realistic multi-currency test expenses spanning USD, EUR, GBP, and JPY across various dates and categories.
 - `POST /api/reset`
-  - Clears all expenses (for fresh testing).
+  - Clears all expenses from SQLite persistence (for fresh clean-slate testing). Resets autoincrement ID sequences.
+
+### Settings & Database Lifecycle Management
+- **Settings Modal (`src/components/SettingsModal.tsx`)**: Accessed via the top navigation **Settings** button. Displays live SQLite engine diagnostics (WAL mode, total records, active currencies count, storage health).
+- **Empty Database with In-App Confirmation (`src/components/ClearConfirmModal.tsx`)**: An in-app dialog (avoiding standard browser alerts that can be blocked in iframes) requiring explicit user confirmation before wiping transaction history.
+- **On-Demand Demo Seeding**: Allows populating realistic multi-currency sample expenses at any time without unsolicited background resets.
+- **Full CRUD Support**: Complete UI controls for Creating, Reading, Updating, and Deleting expenses from both table and dashboard views.
 
 ---
 

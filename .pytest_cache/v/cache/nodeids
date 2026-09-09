@@ -4,6 +4,7 @@
   "tests/test_api_crud.py::test_health_check",
   "tests/test_api_crud.py::test_nonexistent_expense_404",
   "tests/test_api_crud.py::test_update_expense",
+  "tests/test_currencies_and_summary.py::test_empty_database_and_crud_lifecycle",
   "tests/test_currencies_and_summary.py::test_multi_currency_isolation",
   "tests/test_currencies_and_summary.py::test_seed_and_reset_data",
   "tests/test_database.py::test_amount_check_constraint",
