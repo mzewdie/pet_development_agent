@@ -6,3 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local database and IDE
+expenses.db
+.idea/
+backend/__pycache__/
+package-lock.json
